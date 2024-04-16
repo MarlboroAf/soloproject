@@ -12,7 +12,7 @@ from faker import Faker
 from shop.models import Cart, Customer, LineItem, Order, Product
 
 class Command(BaseCommand):
-    help = 'Load data into the tables'
+    help = 'Load data into the tables111'
 
     def handle(self, *args, **options):
 
