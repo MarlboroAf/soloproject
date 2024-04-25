@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-mg2myf8t^(5rflo48c%jc3)43m^&e(gtb84za++%1$u0zn%djh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -55,9 +55,9 @@ MIDDLEWARE = [
 ]
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
-# https://docs.djangoproject.com/en/4.1/topics/auth/default/ 
+# https://docs.djangoproject.com/en/4.1/topics/auth/default/
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/' 
+LOGOUT_REDIRECT_URL = '/'
 
 ROOT_URLCONF = 'shopping.urls'
 
@@ -128,6 +128,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+CSRF_TRUSTED_ORIGINS =  ['https://dawanlamian.pythonanywhere.com', 'localhost']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
