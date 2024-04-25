@@ -4,7 +4,7 @@ from behave import given, when, then
 
 @given( "we want to add a product")
 def user_on_product_newpage(context):
-    base_url = 'http://localhost:8000/'
+    base_url = 'https://gloriaaztec-cameracoconut-8000.codio-box.uk'
     open_url = urljoin(base_url,'/product_new/')
     context.browser.get(open_url)
 
@@ -22,7 +22,7 @@ def product_added(context):
 
 @given(u'we have specific products to add')
 def specific_products(context):
-    base_url = 'http://localhost:8000/'
+    base_url = 'https://gloriaaztec-cameracoconut-8000.codio-box.uk/'
     open_url = urljoin(base_url,'/product_new/')
     for row in context.table:
         context.browser.get(open_url)
@@ -35,14 +35,14 @@ def specific_products(context):
        
 @when(u'we visit the listing page')
 def step_impl(context):
-    base_url = 'http://localhost:8000/'
+    base_url = 'https://gloriaaztec-cameracoconut-8000.codio-box.uk/'
     open_url = urljoin(base_url,'/product_list')
     context.browser.get(open_url)
     assert 'Product List' in context.browser.page_source
 
 @then(u'we will find \'stanwell pipe\'')
 def step_impl(context):
-    base_url = 'http://localhost:8000/'
+    base_url = 'https://gloriaaztec-cameracoconut-8000.codio-box.uk/'
     open_url = urljoin(base_url,'/product_list/?page=999')
     context.browser.get(open_url)
     assert 'stanwell pipe' in context.browser.page_source
