@@ -6,13 +6,11 @@ from shop.models import Product
 from shop.forms import BasketAddProductForm 
 
 class Basket(object):
-    # a data transfer object to shift items from cart to page
-    
     def __init__(self, request):
         self.session = request.session
         basket = self.session.get(settings.BASKET_SESSION_ID)
         if not basket:
-            # save an empty basket in the session
+            # save an empty basket in the session if it doesn't exist
             basket = self.session[settings.BASKET_SESSION_ID] = {}
         self.basket = basket
 
@@ -21,7 +19,7 @@ class Basket(object):
         Iterate over the items in the basket and get the products
         from the database.
         """
-        print(f'basket: { self.basket }')
+        print(f'basket: {self.basket}')
         product_ids = self.basket.keys()
         # get the product objects and add them to the basket
         products = Product.objects.filter(id__in=product_ids)
@@ -48,8 +46,7 @@ class Basket(object):
         """
         product_id = str(product.id)
         if product_id not in self.basket:
-            self.basket[product_id] = {'quantity': 0,
-                                      'price': str(product.price)}
+            self.basket[product_id] = {'quantity': 0, 'price': str(product.price)}
         if override_quantity:
             self.basket[product_id]['quantity'] = quantity
         else:
@@ -75,31 +72,42 @@ class Basket(object):
         self.save()
 
     def get_total_price(self):
+        """
+        Calculate the total price of all items in the basket.
+        """
         return sum(Decimal(item['price']) * item['quantity'] for item in self.basket.values())
 
 
 @require_POST
 def basket_add(request, product_id):
+    """
+    Add a product to the basket.
+    """
     basket = Basket(request)
     product = get_object_or_404(Product, id=product_id)
     form = BasketAddProductForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data
-        basket.add(product=product,
-                 quantity=cd['quantity'],
-                 override_quantity=cd['override'])
+        basket.add(product=product, quantity=cd['quantity'], override_quantity=cd['override'])
     return redirect('shop:basket_detail')
 
 @require_POST
 def basket_remove(request, product_id):
+    """
+    Remove a product from the basket.
+    """
     basket = Basket(request)
     product = get_object_or_404(Product, id=product_id)
     basket.remove(product)
     return redirect('shop:basket_detail')
 
 def basket_detail(request):
+    """
+    Display the contents of the basket.
+    """
     basket = Basket(request)
     for item in basket:
         item['update_quantity_form'] = BasketAddProductForm(initial={'quantity': item['quantity'],
-                                                                   'override': True})
+                                                                     'override': True})
     return render(request, 'shop/shoppingcart.html', {'basket': basket})
+

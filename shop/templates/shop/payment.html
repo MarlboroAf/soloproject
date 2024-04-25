@@ -6,10 +6,10 @@
   {% for item in basket %}
     {% with product=item.product %}
  
-<p>You put {{product.quantity }} of our <b> {{ product.name }} </b> which each cost {{ item.price }} and cost {{ item.total_price }} for in your basket.</p>
+<p>You have  <b> {{ product.name }} </b> which each cost {{ item.price }} and cost {{ item.total_price }}  in your basket.</p>
      {% endwith %}
    {% endfor %}
- <p>The total for all of this fun is: {{ basket.get_total_price }} </p>
+ <p>The total price is : {{ basket.get_total_price }} </p>
    <p>
     <form action="/payment/" method="post">
        {% csrf_token %}

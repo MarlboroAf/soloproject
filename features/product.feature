@@ -8,7 +8,7 @@ Feature: checking products
     Scenario: adding products
         Given we have specific products to add
         | name          | price  |
-        | this one      | 23.45  |
-        | another thing | 34.56  |
+        | stanwell pipe | 50.00  |
+        | dunhill pipe  | 400.00 |
         When we visit the listing page
-        Then we will find 'another thing'
+        Then we will find 'stanwell pipe'

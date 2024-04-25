@@ -11,14 +11,14 @@ def user_on_product_newpage(context):
 @when( "we fill in the form")
 def user_fills_in_the_form(context):
     name_textfield = context.browser.find_element('name', 'name')
-    name_textfield.send_keys('thing one')
+    name_textfield.send_keys('stanwell pipe')
     price_textfield = context.browser.find_element('name','price')
     price_textfield.send_keys(3)
     context.browser.find_element('name','submit').click()
 
 @then( "it succeeds")
 def product_added(context):
-    assert 'thing one' in context.browser.page_source
+    assert 'stanwell pipe' in context.browser.page_source
 
 @given(u'we have specific products to add')
 def specific_products(context):
@@ -40,9 +40,9 @@ def step_impl(context):
     context.browser.get(open_url)
     assert 'Product List' in context.browser.page_source
 
-@then(u'we will find \'another thing\'')
+@then(u'we will find \'stanwell pipe\'')
 def step_impl(context):
     base_url = 'http://localhost:8000/'
     open_url = urljoin(base_url,'/product_list/?page=999')
     context.browser.get(open_url)
-    assert 'another thing' in context.browser.page_source
+    assert 'stanwell pipe' in context.browser.page_source
