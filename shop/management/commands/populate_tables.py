@@ -1,92 +1,59 @@
-"""
-This file will populate the tables using Faker
-"""
-import random
-import decimal
-from datetime import datetime
-from django.db import models
-from django.contrib.auth.models import User
-from django.core.management.base import BaseCommand, CommandError
-from faker import Faker
-
-from shop.models import Cart, Customer, LineItem, Order, Product
+import xlrd
+import os
+from pathlib import Path
+from django.core.management.base import BaseCommand
+from shop.models import Product, Order
 
 class Command(BaseCommand):
-    help = 'Load data into the tables111'
+    help = 'Load data from xls'
 
     def handle(self, *args, **options):
+        try:
+            # Delete existing data before importing new data
+            self.delete_existing_data()
 
-# drop the tables - use this order due to foreign keys - so that we can rerun the file as needed without repeating values
-        Cart.objects.all().delete()
-        LineItem.objects.all().delete()
-        Order.objects.all().delete()
+            # Get the base directory of the project
+            base_dir = self.get_base_directory()
+
+            # Construct the file path of the Excel file to be imported
+            file_path = os.path.join(base_dir, 'shop', 'data', 'products.xls')
+
+            # Import data from the Excel file
+            self.import_data_from_excel(file_path)
+
+            # Print success message
+            self.stdout.write(self.style.SUCCESS("Data imported successfully!"))
+        except Exception as e:
+            # Print error message if an exception occurs
+            self.stderr.write(self.style.ERROR(f"Error occurred: {e}"))
+
+    def delete_existing_data(self):
+        # Delete all existing data in Data models
         Product.objects.all().delete()
-        Customer.objects.all().delete()
-        User.objects.all().delete()
-        print("tables dropped successfully")
+        Order.objects.all().delete()
 
-        fake = Faker()
+        # Print success message
+        self.stdout.write(self.style.SUCCESS("Tables dropped successfully"))
 
-        # create some customers
-        # we convert some values from tuples to strings
-        for i in range(10):
-            first_name = fake.first_name(),
-            first_name = str(first_name[0])
-            last_name = fake.last_name(),
-            last_name = str(last_name[0])
-            username = first_name + last_name,
-            username = username[0]
-            user = User.objects.create_user(
-            username = username,
-            first_name = first_name,
-            last_name = last_name,
-            email = fake.ascii_free_email(), 
-            password = 'p@ssw0rd')
-            customer = Customer.objects.get(user = user)
-            customer.address = fake.address(),
-            customer.address = str(customer.address[0])
-            customer.save()
+    def get_base_directory(self):
+        # Get the base directory of the Django project
+        return Path(__file__).resolve().parent.parent.parent.parent
 
-        # create some products
-        for i in range(10):
-            product = Product.objects.create(
-            name = fake.catch_phrase(),
-            price = int( decimal.Decimal(random.randrange(155,899))/100),
-            )
-            product.save()
+    def import_data_from_excel(self, file_path):
+        # Open the Excel workbook
+        workbook = xlrd.open_workbook(file_path)
 
-        # create some carts 
-        products = list(Product.objects.all())
-        for i in range(10):
-            random_id = random.randint(1,9)
-            cart = Cart.objects.create(
-            product = products[random_id],
-            quantity = random.randrange(1,42),
-            )
-            cart.save()
+        # Import data from the first sheet (data sheet)
+        self.import_data_sheet(workbook.sheet_by_index(0))
 
-        # create orders from customers
-        customers = Customer.objects.all()
-        for customer in customers:  
-            for i in range(3):
-                order = Order.objects.create(
-                customer = customer,
-                )
-                order.save()
-               
-        # attach line_items to orders
-        orders = Order.objects.all()
-        carts = Cart.objects.all()
-        for order in orders:
-            for cart in carts:
-                line_item = LineItem.objects.create(
-                quantity = cart.quantity,
-                product = cart.product,
-                cart = cart,
-                order = order,
-                )
-                line_item.save()
-        
-        print("tables successfully loaded")
-               
-    
+    def import_data_sheet(self, sheet):
+        # Iterate through rows in the data sheet
+        for row_idx in range(1, sheet.nrows):
+            # Extract product name and price
+            row = sheet.row_values(row_idx)
+            sku = row[0]
+            name = row[1]
+            price = row[5]
+            # Create Data objects and print information
+            Products = Product.objects.create(sku=sku,name=name, price=price,)
+            print(f" Product Name: {name}, price: {price}")

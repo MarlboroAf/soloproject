@@ -1,11 +1,50 @@
-{% extends 'shop/base.html' %}
+{% extends 'shop/navigationbar.html' %}
 {% block content %}
-    <h1>Acme Shopping: Customer Details</h1>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li style="color: red; font-weight: bold;">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <h1>Ebay: Customer Details</h1>
     
-    <p>Customer: 
-      This is {{ user.first_name }} {{ user.last_name }} who lives at 
-      {{user.customer.address}}. You can reach them at {{ user.email }} 
-   </p>
-  <p>Modify the method to also supply the customer's orders</p>
-   
-    {% endblock %}
+    <table>
+        <tr>
+            <th>Customer Name</th>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td>{{ user.customer.address }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
+    </table>
+
+  <p>Orders:</p>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in user.orders.all %}
+      <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.product.name }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>{{ order.price }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

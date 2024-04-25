@@ -21,13 +21,6 @@ def signup(request):
         return redirect('/')
     return render(request, 'signup.html', {'form': form})
 
-@login_required
-def dashboard(request):
-    user = request.user
-    if user.is_authenticated & user.is_staff:
-        return render(request, 'shop/dashboard.html')
-    else:
-        return redirect('shop:login')
 
 # save order, clear basket and thank customer
 def payment(request):
@@ -51,6 +44,6 @@ def purchase(request):
        user = request.user
        basket = Basket(request)
        
-       return render(request, 'shop/purchase.html', {'basket': basket, 'user': user})
+       return render(request, 'shop/payment.html', {'basket': basket, 'user': user})
     else:
         return redirect('shop:login')

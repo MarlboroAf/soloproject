@@ -1,0 +1,55 @@
+{% extends 'shop/navigationbar.html' %}
+{% block content %}
+    <h1>Ebay: Your Basket</h1>
+    
+    <h2>You have these items in your basket:</h2>
+    
+    <table class="basket-table" style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr>
+                
+                <th style="border: 2px solid #000; text-align: center; padding: 8px;">Name</th>
+                <th style="border: 2px solid #000; text-align: center; padding: 8px;">Quantity</th>
+                <th style="border: 2px solid #000; text-align: center; padding: 8px;">Actions</th>
+                <th style="border: 2px solid #000; text-align: center; padding: 8px;">Commodity Price</th>
+                <th style="border: 2px solid #000; text-align: center; padding: 8px;">Total Product Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in basket %}
+                {% with product=item.product %}
+                    <tr>
+                        
+                        <td style="border: 2px solid #000; text-align: center; padding: 8px;">{{ product.name }}</td>
+                        <td style="border: 2px solid #000; text-align: center; padding: 8px;">
+                            <form action="{% url 'shop:basket_add' product.id %}" method="post">
+                                {{ item.update_quantity_form.quantity }}
+                                {{ item.update_quantity_form.override }}
+                                <input type="submit" value="Update">
+                                {% csrf_token %}
+                            </form>
+                        </td>
+                        <td style="border: 2px solid #000; text-align: center; padding: 8px;">
+                            <form action="{% url 'shop:basket_remove' product.id %}" method="post">
+                                <input type="submit" value="Remove">
+                                {% csrf_token %}
+                            </form>
+                        </td>
+                        <td style="border: 2px solid #000; text-align: center; padding: 8px;" class="num">${{ item.price }}</td>
+                        <td style="border: 2px solid #000; text-align: center; padding: 8px;" class="num">${{ item.total_price }}</td>
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+            <tr class="total">
+                <td colspan="5" style="border: 2px solid #000; text-align: center; padding: 8px;">Total</td>
+                <td style="border: 2px solid #000; text-align: center; padding: 8px;" class="num">${{ basket.get_total_price }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <p class="text-right">
+        <a href="{% url "shop:product_list" %}" class="button light">Continue shopping</a>
+    </p>
+    
+    <a href="{% url 'shop:purchase' %}" class="purchase-button">Purchase</a>
+{% endblock %}

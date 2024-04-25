@@ -6,9 +6,6 @@ from shop.forms import ProductForm
 
 
 # Create your tests here.
-# use the line below for debugging so that you can see what is on the page
-#  print(response.content)
-# good examples for form testing at https://www.valentinog.com/blog/testing-modelform/ 
 
 class ShopFormTests(TestCase):
         @classmethod

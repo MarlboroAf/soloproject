@@ -1,0 +1,39 @@
+{% extends 'shop/navigationbar.html' %}
+{% block content %}
+    <h1>Product List</h1>
+    <form method="GET" action="{% url 'shop:product_list' %}">
+        <input type="text" name="q" placeholder="Search by product name">
+        <button type="submit">Search</button>
+    </form>
+    <table style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #dddddd; padding: 8px;">Product Name</th>
+                <th style="border: 1px solid #dddddd; padding: 8px;">Price</th>
+                <th style="border: 1px solid #dddddd; padding: 8px;">Created Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td style="border: 1px solid #dddddd; padding: 8px;"><a href="{% url 'shop:product_detail' id=product.id %}">{{ product.name }}</a></td>
+                    <td style="border: 1px solid #dddddd; padding: 8px;">{{ product.price }}</td>
+                    <td style="border: 1px solid #dddddd; padding: 8px;">{{ product.created_date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if user.is_staff %}
+        <p><a href="{% url 'shop:product_new' %}">Add a new product</a></p>
+    {% endif %}
+
+    {% if products.has_previous %}
+        <a href="?page={{ products.previous_page_number }}">Previous</a>
+    {% endif %}
+    Page {{ products.number }} of {{ products.paginator.num_pages }}
+    {% if products.has_next %}
+        <a href="?page={{ products.next_page_number }}">Next</a>
+    {% endif %}
+{% endblock %}
+

@@ -1,0 +1,85 @@
+{% load static %}
+<html>
+<head>
+  <title>Ebay Shopping </title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+    
+    a {
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    a:hover {
+        color: #0056b3;
+        animation: bounce 0.5s;
+    }
+
+    @keyframes bounce {
+        0% {
+            transform: translateY(0);
+        }
+        25% {
+            transform: translateY(-5px);
+        }
+        50% {
+            transform: translateY(0);
+        }
+        75% {
+            transform: translateY(-5px);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+    
+    .navigation {
+        background-color: #007bff;
+        padding: 10px;
+    }
+    
+    .navigation a {
+        margin-right: 10px;
+        color: white;
+    }
+
+    .navigation a:last-child {
+        margin-right: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="navigation">
+    {% if user.is_staff %}
+    <a href="{% url 'shop:product_list' %}">Ebay Home</a>
+    <a href="{% url 'shop:basket_detail' %}">Basket</a>
+    <a href="{% url 'shop:customer_list' %}">Customers</a>
+    <a href="{% url 'shop:order_list' %}">Orders</a>
+    {% else %}
+    <a href="{% url 'shop:product_list' %}">Ebay Home</a>
+    <a href="{% url 'shop:basket_detail' %}">Basket</a>
+    {% endif %}
+    {% if user.is_authenticated %}
+    <span class="user-name">Welcome, {{ user.username }}</span>
+    <form action="{% url 'shop:logout' %}" method="post">
+      {% csrf_token %} 
+      <button type="submit">Logout</button>
+    </form>
+    {% else %}
+    <a href="{% url 'shop:login' %}">Log In</a>
+    {% endif %}
+  </div>
+
+  <div class="content">
+    {% block content %}
+    {% endblock %}
+  </div>
+</body>
+</html>

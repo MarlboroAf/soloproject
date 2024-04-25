@@ -14,9 +14,7 @@ class Cart(models.Model):
     def __str__(self):
         return f'{self.product},{self.quantity},{self.created_date}'
 
-# switch customer to user so that we can use Django's componenents
-# https://blog.crunchydata.com/blog/extending-djangos-user-model-with-onetoonefield 
-# https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
+
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True,)
     address = models.TextField()
@@ -55,13 +53,12 @@ class Order(models.Model):
         return f'{self.customer},{self.created_date}'
 
 class Product(models.Model):
+    sku = models.CharField(max_length=200)
     name = models.CharField(max_length=200, db_index=True)
-    # use decimal instead of float to avoid rounding errors
-    # always use decimal for money values
-    price = models.DecimalField(max_digits=4, decimal_places=2) 
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.name},{self.price},{self.created_date}'
+        return f'{self.sku},{self.name},{self.price},{self.created_date}'
 
 

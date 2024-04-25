@@ -7,8 +7,6 @@ from shop.forms import BasketAddProductForm
 
 class Basket(object):
     # a data transfer object to shift items from cart to page
-    # inspired by Django 3 by Example (2020) by Antonio Mele
-    # https://github.com/PacktPublishing/Django-3-by-Example/
     
     def __init__(self, request):
         self.session = request.session
@@ -104,4 +102,4 @@ def basket_detail(request):
     for item in basket:
         item['update_quantity_form'] = BasketAddProductForm(initial={'quantity': item['quantity'],
                                                                    'override': True})
-    return render(request, 'shop/basket.html', {'basket': basket})
+    return render(request, 'shop/shoppingcart.html', {'basket': basket})

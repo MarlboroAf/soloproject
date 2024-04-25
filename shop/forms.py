@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Product
+from .models import Product, Customer
+
 
 class SignUpForm(UserCreationForm):
     username = forms.CharField(max_length=30)
@@ -31,3 +32,14 @@ class BasketAddProductForm(forms.Form):
     override = forms.BooleanField(required=False,
                                   initial=False,
                                   widget=forms.HiddenInput)
+
+class CustomerForm(forms.ModelForm):
+    username = forms.CharField(max_length=30)
+    first_name = forms.CharField(max_length=30)
+    last_name = forms.CharField(max_length=30)
+    email = forms.EmailField(max_length=50)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', )
+

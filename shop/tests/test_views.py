@@ -3,8 +3,6 @@ from django.urls import reverse
 from shop.models import Product
 
 # Create your tests here.
-# use the line below for debugging so that you can see what is on the page
-#  print(response.content)
 
 class ShopViewsTests(TestCase):
         @classmethod
