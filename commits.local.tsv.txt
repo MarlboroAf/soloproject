@@ -1,0 +1,7 @@
+e032081	AOFEI LIU	Thu Apr 25 21:20:00 2024	update
+19b40b6	dawanlamian	Thu Apr 25 12:40:38 2024	configured settings in order to run on pythonanywhere
+4dbeb14	MarlboroAf	Thu Apr 25 01:00:26 2024	adjust pyment page
+25c06b0	MarlboroAf	Thu Apr 25 00:27:46 2024	add behave , register models to admin panel.
+bd49507	MarlboroAf	Thu Apr 25 00:12:21 2024	add search and pagination for the main page , add user management, allowing admin to edit and delete customers.
+713e096	MarlboroAf	Tue Apr 16 20:55:07 2024	111
+e2b0e90	AOFEI LIU	Tue Apr 16 20:46:19 2024	init
